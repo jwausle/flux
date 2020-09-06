@@ -212,6 +212,9 @@ spec:
           {{- end }}
           - --git-url={{ .Values.git.url }}
           - --git-branch={{ .Values.git.branch }}
+          {{- if .Values.git.tag }}
+          - --git-tag={{ .Values.git.tag }}
+          {{- end }}
           - --git-path={{ .Values.git.path }}
           - --git-readonly={{ .Values.git.readonly }}
           - --git-user={{ .Values.git.user }}

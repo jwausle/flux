@@ -14,7 +14,8 @@ var (
 // Config holds some values we use when working in the working clone of
 // a repo.
 type Config struct {
-	Branch      string   // branch we're syncing to
+	Branch      string   // branch-ref we're syncing to
+	Tag         string   // or tag-ref we're syncing (preferred if set)
 	Paths       []string // paths within the repo containing files we care about
 	NotesRef    string
 	UserName    string

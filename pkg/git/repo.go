@@ -53,6 +53,7 @@ type Repo struct {
 	// As supplied to constructor
 	origin   Remote
 	branch   string
+	tag      string
 	interval time.Duration
 	timeout  time.Duration
 	readonly bool
@@ -223,13 +224,20 @@ func (r *Repo) Revision(ctx context.Context, ref string) (string, error) {
 }
 
 // BranchHead returns the HEAD revision (SHA1) of the configured branch
+// - Recommend rename to `commitOfTagOrBranchHead`
 func (r *Repo) BranchHead(ctx context.Context) (string, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 	if err := r.errorIfNotReady(); err != nil {
 		return "", err
 	}
-	return refRevision(ctx, r.dir, "heads/"+r.branch)
+	if r.tag != "" {
+		return refRevision(ctx, r.dir, "tags/"+r.tag)
+	} else if r.branch != "" {
+		return refRevision(ctx, r.dir, "heads/"+r.branch)
+	} else {
+		return "", ErrNoConfig
+	}
 }
 
 func (r *Repo) CommitsBefore(ctx context.Context, ref string, firstParent bool, paths ...string) ([]Commit, error) {

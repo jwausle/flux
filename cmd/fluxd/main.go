@@ -114,7 +114,8 @@ func main() {
 		versionFlag       = fs.Bool("version", false, "get version number")
 		// Git repo & key etc.
 		gitURL       = fs.String("git-url", "", "URL of git repo with Kubernetes manifests; e.g., git@github.com:fluxcd/flux-get-started")
-		gitBranch    = fs.String("git-branch", "master", "branch of git repo to use for Kubernetes manifests")
+		gitBranch    = fs.String("git-branch", "master", "branch-ref of git repo to use for Kubernetes manifests")
+		gitTag       = fs.String("git-tag", "", "tag-ref of git repo to use for Kubernetes manifests(preferred before git-branch)")
 		gitPath      = fs.StringSlice("git-path", []string{}, "relative paths within the git repo to locate Kubernetes manifests")
 		gitReadonly  = fs.Bool("git-readonly", false, fmt.Sprintf("use to prevent Flux from pushing changes to git; implies --sync-state=%s", fluxsync.NativeStateMode))
 		gitUser      = fs.String("git-user", "Weave Flux", "username to use as git committer")
@@ -644,6 +645,7 @@ func main() {
 	gitConfig := git.Config{
 		Paths:       *gitPath,
 		Branch:      *gitBranch,
+		Tag:         *gitTag,
 		NotesRef:    *gitNotesRef,
 		UserName:    *gitUser,
 		UserEmail:   *gitEmail,
